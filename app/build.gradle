@@ -1,30 +1,79 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
-    defaultConfig {
-        applicationId "openpilot.cn.myapplication"
-        minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+    useLibrary 'org.apache.http.legacy'
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
+
+    defaultConfig {
+        applicationId "me.jessyan.mvparms.demo"
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
+    }
+
     buildTypes {
-        release {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "true"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    compile 'me.jessyan:arms:2.4.1'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile rootProject.ext.dependencies["junit"]
+    compile rootProject.ext.dependencies["support-v4"]
+    compile rootProject.ext.dependencies["gson"]
+    compile rootProject.ext.dependencies["appcompat-v7"]
+    compile rootProject.ext.dependencies["cardview-v7"]
+    compile rootProject.ext.dependencies["autolayout"]
+    compile rootProject.ext.dependencies["butterknife"]
+    compile rootProject.ext.dependencies["androideventbus"]
+    compile rootProject.ext.dependencies["rxlifecycle2-components"]
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
+    compile 'com.roughike:bottom-bar:2.3.1'
+    //底部导航
+    compile 'liji.library.dev:citypickerview:3.1.8'
+    compile 'com.yuyh.imgsel:library:2.0.2'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.github.fodroid:XRadioGroup:v1.1'
+    implementation 'com.gesturelock:GestureLock:1.0'
+    annotationProcessor rootProject.ext.dependencies[
+            "butterknife-compiler"]
+    //Butterknife 插件,很多人因为没加这个而报错,切记!!!
+    annotationProcessor rootProject.ext.dependencies[
+            "dagger2-compiler"]
+    //依赖插件, annotationProcessor 是 AndroidStudio 自带并用来替换 APT
+    implementation rootProject.ext.dependencies["progressmanager"]
+    implementation rootProject.ext.dependencies["retrofit-url-manager"]
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

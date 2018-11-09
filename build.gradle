@@ -1,23 +1,73 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+apply from: "config.gradle"
 buildscript {
+
+    ext {
+        /*sdk and version*/
+        compile_sdk_version = 26
+        build_tools_version = '26.0.2'
+        min_sdk_version = 14
+        target_sdk_version = 26
+        constraint_version = '1.1.0'
+        version_code = 220
+        version_name = '2.2.0'
+
+        /*support*/
+        android_support = '26.1.0'
+
+
+
+    }
     repositories {
-        jcenter()
+        // google()
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public'}
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        //Gradle Android Maven plugin
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+        //Gradle Bintray Plugin
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
     }
+
 }
 
 allprojects {
     repositories {
-        jcenter()
+        // google()
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public'}
+        maven { url "https://jitpack.io" }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+ext {
+    // Sdk and tools
+    minSdkVersion = 14
+    targetSdkVersion = 25
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.2'
+
+    // App dependencies
+    supportLibraryVersion = '26.1.0'
+    constraintVersion = '1.1.0'
+    junitVersion = '4.12'
+    retrofitVersion = '2.2.0'
+    okhttpVersion = '3.6.0'
+    rxjavaVersion = '2.0.6'
+    rxandroidVersion = '2.0.1'
+    rxCacheVersion = '1.8.0-2.x'
+    rxCacheGsonVersion = '0.0.3'
+    espressoVersion = '2.2.2'
+    gsonVersion = '2.8.0'
+    daggerVersion = '2.9'
+    butterKnifeVersion = '8.5.1'
+    frescoVersion = '1.2.0'
+    arouterVersion = '1.2.0'
+    arouterCompilerVersion = '1.1.1'
+    easypermissionVersion = '0.3.1'
+    autoScrollViewPagerVersion = '2.1.7'
 }
